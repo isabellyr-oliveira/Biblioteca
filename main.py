@@ -21,6 +21,7 @@ def criar_tabela():
         if conexao:
             conexao.close()   
 criar_tabela()
+conexao.commit()
 
 def cadastrar_lisvro(titulo,autor,ano):
     try:
@@ -50,3 +51,20 @@ autor = input("Digite o nome do autor do livro que deseja cadastrar: ")
 ano = int(input("Digite o ano em que o livro que deseja cadastrar foi publicado: "))
 
 cadastrar_lisvro(titulo,autor,ano)
+conexao.commit()
+
+def listar_livros():
+    try:
+        conexao = sqlite3.connect("biblioteca.db")
+        cursor = conexao.cursor()
+        
+        cursor.execute("SELECT * FROM livros")
+        for linha in cursor.fetchall():
+            print(f"Título: {linha[1]} | Autor: {linha[2]} | Ano: {linha[3]} | Disponibilidade: {linha[4]}")
+    except Exeption as erro:
+        print(f"Erro ao listar os livros cadastrados {erro}")
+    finally:
+        if conexao:
+            conexao.close()
+listar_livros()
+conexao.commit()
