@@ -21,7 +21,7 @@ import sqlite3
 #         if conexao:
 #             conexao.close()   
 # criar_tabela()
-# conexao.commit()
+
 
 # def cadastrar_lisvro(titulo,autor,ano):
 #     try:
@@ -51,7 +51,7 @@ import sqlite3
 # ano = int(input("Digite o ano em que o livro que deseja cadastrar foi publicado: "))
 
 # cadastrar_lisvro(titulo,autor,ano)
-# conexao.commit()
+
 
 # def listar_livros():
 #     try:
@@ -68,23 +68,44 @@ import sqlite3
 #             conexao.close()
 # listar_livros()
 
-def atualizacao_disponibilidade(id_livro,disponivel):
+# def atualizacao_disponibilidade(id_livro,disponivel):
+#     try:
+#         conexao = sqlite3.connect("biblioteca.db")
+#         cursor = conexao.cursor()
+        
+#         cursor.execute("""
+#         UPDATE livros
+#         SET disponível = ?
+#         WHERE id = ?          
+#         """,(disponivel, id_livro)
+#         )
+#         conexao.commit()
+#     except Exception as erro:
+#         print("Não foi possível fazer a atualização {erro}")
+#     finally:
+#         if conexao:
+#             conexao.close()
+# livro_id = input("Digite o ID do livro que deseja atualizar: ")
+# disponibilidade = input("Atualize a disponibilidade do livro: ")
+# atualizacao_disponibilidade(livro_id, disponibilidade)
+
+def remover_livro(id_livro):
     try:
         conexao = sqlite3.connect("biblioteca.db")
         cursor = conexao.cursor()
         
-        cursor.execute("""
-        UPDATE livros
-        SET disponível = ?
-        WHERE id = ?          
-        """,(disponivel, id_livro)
-        )
+        cursor.execute("DELETE FROM livros WHERE id = ?", (id_livro,))
         conexao.commit()
+        
+        if cursor.rowcount > 0:
+            print("Livro removido com sucesso!")
+        else:
+            print("Nenhum livro foi encontrado com o ID fornecido.")
     except Exception as erro:
-        print("Não foi possível fazer a atualização {erro}")
+        print(f"Erro ao tentar excluir livro {erro}")
     finally:
         if conexao:
             conexao.close()
-livro_id = input("Digite o ID do livro que deseja atualizar: ")
-disponibilidade = input("Atualize a disponibilidade do livro: ")
-atualizacao_disponibilidade(livro_id, disponibilidade)
+
+deletar = int(input("Digite o ID do livro que deseja deletar: "))
+remover_livro(deletar)
